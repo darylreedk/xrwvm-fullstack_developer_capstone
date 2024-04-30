@@ -28,6 +28,7 @@ def get_request(endpoint, **kwargs):
     except Exception as e:
         # If any error occurs
         print("Network exception occurred")
+        print(f"Error: {e}")
 
 
 # Add code for retrieving sentiments
@@ -51,3 +52,4 @@ def post_review(data_dict):
         return response.json()
     except Exception as e:
         print("Network exception occured")
+        print(f"Error: {e}")

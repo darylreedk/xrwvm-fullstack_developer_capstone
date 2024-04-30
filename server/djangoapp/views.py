@@ -1,7 +1,7 @@
 # Uncomment the required imports before adding the code
 
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+#from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -63,7 +63,7 @@ def registration(request):
     except Exception as e:
         print(f"Error: {e}")
         logger.debug(f"{username} is a new user")
-    
+
     # If it is a new user create a user in auth_user table and log them in
     if not username_exists:
         user = User.objects.create_user(
@@ -99,8 +99,9 @@ def get_cars(request):
     return JsonResponse({"CarModels": cars})
 
 
-# # Update the `get_dealerships` view to render the index page with a list of dealerships
-def get_dealerships(request, state = "All"):
+# # Update the `get_dealerships` view to render the index 
+# # page with a list of dealerships
+def get_dealerships(request, state="All"):
     if (state == "All"):
         endpoint = "/fetchDealers"
     else:
@@ -120,9 +121,9 @@ def get_dealer_reviews(request, dealer_id):
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
             review_detail['sentiment'] = response['sentiment']
-        return JsonResponse({"status": 200,"reviews": reviews})
+        return JsonResponse({"status": 200, "reviews": reviews})
     else:
-        return JsonResponse({"status": 400,"message": "Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 # ...
 
 
@@ -133,7 +134,7 @@ def get_dealer_details(request, dealer_id):
         dealership = get_request(endpoint)
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
-        return JsonResponse({"status": 400,"message": "Bad Request"})
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 # ...
 
 
@@ -143,7 +144,7 @@ def add_review(request):
         data = json.loads(request.body)
         try:
             response = post_review(data)
-            return JsonResponse({"status":200})
+            return JsonResponse({"status": 200}, {"response": response})
         except Exception as e:
             print(f"Error: {e}")
             return JsonResponse({

@@ -1,7 +1,6 @@
 # Uncomment the required imports before adding the code
 
 from django.contrib.auth.models import User
-#from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -99,7 +98,7 @@ def get_cars(request):
     return JsonResponse({"CarModels": cars})
 
 
-# # Update the `get_dealerships` view to render the index 
+# # Update the `get_dealerships` view to render the index
 # # page with a list of dealerships
 def get_dealerships(request, state="All"):
     if (state == "All"):

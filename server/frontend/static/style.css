@@ -13,6 +13,11 @@ img{
   margin-bottom: 1%;
 }
 
+.shadowed{
+  border-radius: 25px !important;
+  box-shadow: 5px 5px lightslategray;
+}
+
 .row{
   display: flex;  
   flex: 1;
@@ -26,6 +31,11 @@ img{
 .column{
   float: left;
   flex: 50%;
+}
+.column.icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container{

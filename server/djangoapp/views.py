@@ -65,7 +65,7 @@ def registration(request):
         username_exist = True
     except Exception as e:
         # If not, simply log this is a new user
-        logger.debug("{} is a new user".format(username), "\nError: {e}")
+        logger.debug("{} is a new user".format(username), e)
 
     # If it is a new user
     if not username_exist:
@@ -82,11 +82,11 @@ def registration(request):
         return JsonResponse(data)
 
 
-# Update the get_dealerships render list of dealerships all by default, 
+# Update the get_dealerships render list of dealerships all by default,
 # particular state if state is passed
 def get_dealerships(request, state="ALL"):
     if (state == "ALL"):
-        endpoint="/fetchDealers"
+        endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/" + state
     # Uses get_request from restapis.py, passing the /fetchDealers endpoint
@@ -97,8 +97,8 @@ def get_dealerships(request, state="ALL"):
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
 def get_dealer_reviews(request, dealer_id):
     if (dealer_id):
-        endpoint= "/fetchReviews/dealer/"+str(dealer_id)
-        reviews= get_request(endpoint)
+        endpoint = "/fetchReviews/dealer/" + str(dealer_id)
+        reviews = get_request(endpoint)
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
@@ -126,7 +126,7 @@ def add_review(request):
             response = post_review(data)
             return JsonResponse({"status": 200, "review": response})
         except Exception as e:
-            return JsonResponse({"status": 401, "message": "{e}"})
+            return JsonResponse({"status": 401, "message": e})
     else:
         return JsonResponse({"status": 403, "message":
                              "Unauthorized"})

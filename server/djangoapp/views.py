@@ -1,11 +1,11 @@
 # Uncomment the required imports before adding the code
 
-#from django.http import HttpResponseRedirect, HttpResponse
+# from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-#from django.shortcuts import get_object_or_404, render, redirect
+# from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
-#from django.contrib import messages
-#from datetime import datetime
+# from django.contrib import messages
+# from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -31,7 +31,7 @@ def login_user(request):
     username = data['userName']
     password = data['password']
     # Try to check if provide credential can be authenticated
-    user = authenticate(username = username, password = password)
+    user = authenticate(username=username, password=password)
     data = {"userName": username}
     if user is not None:
         # If user is valid, call login method to login current user
@@ -50,7 +50,7 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
-    #context = {}
+    # ontext = {}
     data = json.loads(request.body)
     username = data['userName']
     password = data['password']
@@ -58,19 +58,20 @@ def registration(request):
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    #email_exist = False
+    # email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
     except Exception as e:
         # If not, simply log this is a new user
-        logger.debug("{} is a new user".format(username))
+        logger.debug("{} is a new user".format(username), "\nError: {e}")
 
     # If it is a new user
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, 
+        user = User.objects.create_user(
+            username=username, first_name=first_name,
             last_name=last_name, password=password, email=email)
         # Login the user and redirect to list page
         login(request, user)
@@ -83,9 +84,9 @@ def registration(request):
 
 # Update the get_dealerships render list of dealerships all by default, 
 # particular state if state is passed
-def get_dealerships( request, state = "ALL"):
+def get_dealerships(request, state="ALL"):
     if (state == "ALL"):
-        endpoint = "/fetchDealers"
+        endpoint="/fetchDealers"
     else:
         endpoint = "/fetchDealers/" + state
     # Uses get_request from restapis.py, passing the /fetchDealers endpoint
@@ -94,10 +95,10 @@ def get_dealerships( request, state = "ALL"):
 
 
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
-def get_dealer_reviews( request, dealer_id):
+def get_dealer_reviews(request, dealer_id):
     if (dealer_id):
-        endpoint = "/fetchReviews/dealer/"+str(dealer_id)
-        reviews = get_request(endpoint)
+        endpoint= "/fetchReviews/dealer/"+str(dealer_id)
+        reviews= get_request(endpoint)
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
@@ -123,11 +124,11 @@ def add_review(request):
         data = json.loads(request.body)
         try:
             response = post_review(data)
-            return JsonResponse({"status": 200})
+            return JsonResponse({"status": 200, "review": response})
         except Exception as e:
             return JsonResponse({"status": 401, "message": "{e}"})
     else:
-        return JsonResponse({"status": 403, "message": 
+        return JsonResponse({"status": 403, "message":
                              "Unauthorized"})
 
 
@@ -140,6 +141,6 @@ def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": 
+        cars.append({"CarModel": car_model.name, "CarMake":
                      car_model.car_make.name})
     return JsonResponse({"CarModels": cars})
